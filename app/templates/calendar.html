@@ -1,29 +1,100 @@
-<!DOCTYPE html>
-<html class="dark">
-<head>
-  <title>Calendar | GearGuard</title>
-  </head>
+{% extends "base.html" %}
 
-<body class="bg-slate-100 dark:bg-slate-900 p-8 text-black dark:text-white">
+{% block title %}Calendar | GearGuard{% endblock %}
 
-<h2 class="text-2xl font-semibold mb-4">Preventive Maintenance Calendar</h2>
+{% block content %}
+<div class="p-8">
+    <h2 class="text-2xl font-semibold mb-4 text-black dark:text-white">
+        Preventive Maintenance Calendar
+    </h2>
 
-<div id="calendar" class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow"></div>
+    <div id="calendar" class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow"></div>
+
+    <div id="requestModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-xl w-full max-w-md">
+            <div class="flex justify-between items-center mb-4 text-black dark:text-white">
+                <h3 class="text-xl font-semibold">Schedule Maintenance</h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+
+            <form id="maintenanceForm" class="space-y-4 text-black dark:text-white">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Subject</label>
+                    <input type="text" id="subject" name="subject" required
+                        class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">Equipment</label>
+                    <select id="equipment" name="equipment_id" required
+                        class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600">
+                        <option value="">Select equipment...</option>
+                        <option value="1">Printer 01</option>
+                        <option value="2">CNC Machine Alpha</option>
+                        <option value="3">Copier 02</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">Type</label>
+                    <select id="requestType" name="request_type" required
+                        class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600">
+                        <option value="preventive">Preventive (Scheduled)</option>
+                        <option value="corrective">Corrective (Breakdown)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">Scheduled Date</label>
+                    <input type="date" id="scheduledDate" name="scheduled_date" required
+                        class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">Estimated Duration (hours)</label>
+                    <input type="number" id="duration" name="duration" min="0.5" step="0.5"
+                        class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">Notes</label>
+                    <textarea id="notes" name="notes" rows="3"
+                        class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600"></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">
+                    Create Request
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  const calendar = new FullCalendar.Calendar(
-    document.getElementById("calendar"), {
-      initialView: "dayGridMonth",
-      events: [
-        { title: "Printer Check", start: "2025-01-20" },
-        { title: "CNC Maintenance", start: "2025-01-25" }
-      ]
-    }
-  );
-  calendar.render();
+    const calendarEl = document.getElementById("calendar");
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: "dayGridMonth",
+        height: 'auto',
+        events: [
+            { id: 1, title: "Printer Check", start: "2025-01-20", backgroundColor: "#6366f1", borderColor: "#6366f1" },
+            { id: 2, title: "CNC Maintenance", start: "2025-01-25", backgroundColor: "#10b981", borderColor: "#10b981" }
+        ],
+        dateClick: function(info) { openModal(info.dateStr); },
+        eventClick: function(info) { window.location.href = `/request/${info.event.id}`; },
+        eventClassNames: 'cursor-pointer hover:opacity-80',
+    });
+    calendar.render();
 });
-</script>
 
-</body>
-</html>
+function openModal(dateStr) {
+    document.getElementById("scheduledDate").value = dateStr;
+    document.getElementById("requestModal").classList.remove("hidden");
+}
+
+function closeModal() {
+    document.getElementById("requestModal").classList.add("hidden");
+    document.getElementById("maintenanceForm").reset();
+}
+</script>
+{% endblock %}
