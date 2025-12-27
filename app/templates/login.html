@@ -1,56 +1,76 @@
-<!DOCTYPE html>
-<html lang="en" class="dark">
-<head>
-  <title>Login | GearGuard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
+{% extends "base.html" %}
 
-<body class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex">
+{% block title %}Login | GearGuard{% endblock %}
 
-<!-- BRAND PANEL -->
-<div class="hidden md:flex w-1/2 items-center justify-center text-white p-12">
-  <div>
-    <h1 class="text-4xl font-bold mb-4">GearGuard</h1>
-    <p class="text-slate-300 text-lg">
-      Smart maintenance. Zero downtime.
-    </p>
-  </div>
+{% block content %}
+<div class="min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl overflow-hidden mt-4">
+
+    <div class="hidden md:flex w-1/2 items-center justify-center text-white p-12">
+        <div>
+            <h1 class="text-5xl font-bold mb-4">⚙️ GearGuard</h1>
+            <p class="text-slate-300 text-xl">
+                Smart maintenance. Zero downtime.
+            </p>
+            <p class="text-slate-400 mt-4">
+                Track equipment, manage requests, schedule maintenance—all in one place.
+            </p>
+        </div>
+    </div>
+
+    <div class="w-full md:w-1/2 flex items-center justify-center p-8">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-md p-8 rounded-2xl shadow-xl">
+
+            <h2 class="text-2xl font-semibold mb-6 text-black dark:text-white">Sign in to GearGuard</h2>
+
+            <form method="POST" action="{{ url_for('auth.login') }}" class="space-y-5">
+
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-black dark:text-white">Email</label>
+                    <input 
+                        type="email" 
+                        name="email"
+                        placeholder="your.email@company.com"
+                        required
+                        class="w-full px-4 py-3 border rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-black dark:text-white">Password</label>
+                    <input 
+                        type="password" 
+                        name="password"
+                        placeholder="••••••••"
+                        required
+                        class="w-full px-4 py-3 border rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-black dark:text-white">Login as</label>
+                    <select 
+                        name="role"
+                        class="w-full px-4 py-3 border rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <option value="user">User</option>
+                        <option value="technician">Technician</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+
+                <button
+                    type="submit"
+                    class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition font-medium">
+                    Login
+                </button>
+
+            </form>
+
+            <p class="text-sm mt-6 text-center text-gray-500 dark:text-gray-400">
+                New to GearGuard?
+                <a href="{{ url_for('auth.register') }}" class="text-indigo-600 font-medium hover:underline">
+                    Create an account
+                </a>
+            </p>
+
+        </div>
+    </div>
 </div>
-
-<!-- LOGIN CARD -->
-<div class="w-full md:w-1/2 flex items-center justify-center">
-  <div class="bg-white dark:bg-slate-800 w-full max-w-md p-8 rounded-2xl shadow-xl">
-
-    <h2 class="text-2xl font-semibold mb-6 text-black dark:text-white">Sign in</h2>
-
-    <form onsubmit="handleLogin(event)" class="space-y-5">
-
-      <input type="email" placeholder="Email"
-        class="w-full px-4 py-3 border rounded-lg">
-
-      <input type="password" placeholder="Password"
-        class="w-full px-4 py-3 border rounded-lg">
-
-      <select class="w-full px-4 py-3 border rounded-lg">
-        <option>User</option>
-        <option>Technician</option>
-      </select>
-
-      <button
-        class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition">
-        Login
-      </button>
-
-    </form>
-
-    <p class="text-sm mt-6 text-center text-gray-500">
-      New here?
-      <a href="signup.html" class="text-indigo-600 font-medium">Create account</a>
-    </p>
-
-  </div>
-</div>
-
-<script src="js/app.js"></script>
-</body>
-</html>
+{% endblock %}
