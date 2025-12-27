@@ -9,6 +9,9 @@
 
     <!-- Global CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+
 
     {% block head %}{% endblock %}
 </head>
@@ -31,6 +34,16 @@
                 <li><a href="{{ url_for('auth.register') }}">Register</a></li>
             </ul>
         </nav>
+        <!--  Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
     </header>
 
     <!-- 🔹 Main Page Content -->

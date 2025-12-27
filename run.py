@@ -1,5 +1,5 @@
 from app import create_app, db
-from app.models import Request
+from app.models import User, Request 
 
 app = create_app()
 
