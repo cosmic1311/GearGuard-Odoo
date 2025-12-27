@@ -6,24 +6,279 @@
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 </head>
 
-<body class="bg-slate-100 dark:bg-slate-900 p-8 text-black dark:text-white">
+<body class="bg-slate-100 dark:bg-slate-900 flex text-black dark:text-white">
+
+<!-- SIDEBAR - Standardized -->
+<aside class="w-64 bg-slate-900 text-white min-h-screen p-6 flex flex-col">
+  <h2 class="text-2xl font-bold mb-8">GearGuard</h2>
+
+  <nav class="space-y-3 flex-1">
+    <a href="dashboard.html" class="block px-3 py-2 rounded hover:bg-slate-800">Dashboard</a>
+    <a href="equipment.html" class="block px-3 py-2 rounded hover:bg-slate-800">Equipment</a>
+    <a href="kanban.html" class="block px-3 py-2 rounded hover:bg-slate-800">Kanban</a>
+    <!-- Active page -->
+    <a href="calendar.html" class="block px-3 py-2 rounded bg-slate-800">Calendar</a>
+  </nav>
+
+  <button onclick="toggleDarkMode()"
+    class="bg-slate-700 py-2 rounded text-sm hover:bg-slate-600 transition">
+    Toggle Dark Mode
+  </button>
+</aside>
+
+<main class="flex-1 p-8">
 
 <h2 class="text-2xl font-semibold mb-4">Preventive Maintenance Calendar</h2>
 
+<!-- Calendar container -->
 <div id="calendar" class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow"></div>
 
+<!-- MODAL: Create New Maintenance Request -->
+<!-- Hidden by default, shown when user clicks a date -->
+<div id="requestModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-xl w-full max-w-md">
+    
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-xl font-semibold">Schedule Maintenance</h3>
+      <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-2xl">
+        ×
+      </button>
+    </div>
+
+    <!-- FORM: This will POST to Flask backend -->
+    <form id="maintenanceForm" class="space-y-4">
+      
+      <!-- Subject/Title -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Subject</label>
+        <input 
+          type="text" 
+          id="subject" 
+          name="subject"
+          placeholder="e.g., Routine oil change"
+          required
+          class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600">
+      </div>
+
+      <!-- Equipment Selection -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Equipment</label>
+        <select 
+          id="equipment" 
+          name="equipment_id"
+          required
+          class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600">
+          <option value="">Select equipment...</option>
+          <!-- FLASK: Loop through equipment list
+               {% for equip in equipment_list %}
+               <option value="{{ equip.id }}">{{ equip.name }}</option>
+               {% endfor %}
+          -->
+          <option value="1">Printer 01</option>
+          <option value="2">CNC Machine Alpha</option>
+          <option value="3">Copier 02</option>
+        </select>
+      </div>
+
+      <!-- Request Type -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Type</label>
+        <select 
+          id="requestType" 
+          name="request_type"
+          required
+          class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600">
+          <option value="preventive">Preventive (Scheduled)</option>
+          <option value="corrective">Corrective (Breakdown)</option>
+        </select>
+      </div>
+
+      <!-- Scheduled Date - Pre-filled when clicking calendar -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Scheduled Date</label>
+        <input 
+          type="date" 
+          id="scheduledDate" 
+          name="scheduled_date"
+          required
+          class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600">
+      </div>
+
+      <!-- Estimated Duration -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Estimated Duration (hours)</label>
+        <input 
+          type="number" 
+          id="duration" 
+          name="duration"
+          min="0.5" 
+          step="0.5"
+          placeholder="e.g., 2"
+          class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600">
+      </div>
+
+      <!-- Notes/Description -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Notes</label>
+        <textarea 
+          id="notes" 
+          name="notes"
+          rows="3"
+          placeholder="Additional details..."
+          class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600"></textarea>
+      </div>
+
+      <!-- Submit Button -->
+      <button 
+        type="submit"
+        class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">
+        Create Request
+      </button>
+    </form>
+
+  </div>
+</div>
+
+</main>
+
+<script src="js/app.js"></script>
 <script>
+// Initialize calendar when page loads
 document.addEventListener("DOMContentLoaded", function () {
-  const calendar = new FullCalendar.Calendar(
-    document.getElementById("calendar"), {
-      initialView: "dayGridMonth",
-      events: [
-        { title: "Printer Check", start: "2025-01-20" },
-        { title: "CNC Maintenance", start: "2025-01-25" }
-      ]
-    }
-  );
+  
+  const calendarEl = document.getElementById("calendar");
+  
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+    // Monthly grid view
+    initialView: "dayGridMonth",
+    
+    // Make calendar responsive
+    height: 'auto',
+    
+    // FLASK BACKEND: Load events from server
+    // Replace this hardcoded array with data from Flask
+    events: [
+      // FLASK: Pass events as JSON
+      // events: {{ calendar_events|tojson }}
+      // Expected format: [{ title: "...", start: "2025-01-20", id: 1 }, ...]
+      { 
+        id: 1,
+        title: "Printer Check", 
+        start: "2025-01-20",
+        backgroundColor: "#6366f1",
+        borderColor: "#6366f1"
+      },
+      { 
+        id: 2,
+        title: "CNC Maintenance", 
+        start: "2025-01-25",
+        backgroundColor: "#10b981",
+        borderColor: "#10b981"
+      },
+      {
+        id: 3,
+        title: "Generator Service",
+        start: "2025-01-28",
+        backgroundColor: "#f59e0b",
+        borderColor: "#f59e0b"
+      }
+    ],
+    
+    // When user clicks a DATE (not an event)
+    dateClick: function(info) {
+      // Open modal to create new request
+      openModal(info.dateStr);
+    },
+    
+    // When user clicks an existing EVENT
+    eventClick: function(info) {
+      // Redirect to request details page
+      const requestId = info.event.id;
+      window.location.href = `request_detail.html?id=${requestId}`;
+    },
+    
+    // Customize how events look
+    eventClassNames: 'cursor-pointer hover:opacity-80',
+  });
+  
   calendar.render();
+});
+
+// Open the modal to create a new request
+function openModal(dateStr) {
+  const modal = document.getElementById("requestModal");
+  const dateInput = document.getElementById("scheduledDate");
+  
+  // Pre-fill the date field with clicked date
+  dateInput.value = dateStr;
+  
+  // Show modal
+  modal.classList.remove("hidden");
+}
+
+// Close the modal
+function closeModal() {
+  const modal = document.getElementById("requestModal");
+  modal.classList.add("hidden");
+  
+  // Reset form
+  document.getElementById("maintenanceForm").reset();
+}
+
+// Handle form submission
+document.getElementById("maintenanceForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  
+  // Collect form data
+  const formData = {
+    subject: document.getElementById("subject").value,
+    equipment_id: document.getElementById("equipment").value,
+    request_type: document.getElementById("requestType").value,
+    scheduled_date: document.getElementById("scheduledDate").value,
+    duration: document.getElementById("duration").value,
+    notes: document.getElementById("notes").value
+  };
+  
+  // FLASK BACKEND: Send POST request to create new maintenance request
+  /*
+  fetch('/api/requests/create', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData)
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      showToast("Maintenance request created!");
+      closeModal();
+      // Reload calendar to show new event
+      location.reload();
+    } else {
+      showToast("Error: " + data.message);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showToast("Failed to create request");
+  });
+  */
+  
+  // For now, just show success and close
+  console.log("Form data:", formData);
+  showToast("Maintenance request created!");
+  closeModal();
+  
+  // In production, reload page after successful API call
+  // setTimeout(() => location.reload(), 1000);
+});
+
+// Close modal when clicking outside of it
+document.getElementById("requestModal").addEventListener("click", function(e) {
+  if (e.target === this) {
+    closeModal();
+  }
 });
 </script>
 

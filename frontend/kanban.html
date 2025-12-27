@@ -1,51 +1,206 @@
 <!DOCTYPE html>
 <html class="dark">
 <head>
-  <title>Kanban | GearGuard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kanban Board | GearGuard</title>
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-slate-100 dark:bg-slate-900 flex text-black dark:text-white">
 
-<aside class="w-64 bg-slate-900 text-white min-h-screen p-6">
-  <h2 class="text-2xl font-bold mb-8">GearGuard</h2>
-  <nav class="space-y-3">
-    <a href="dashboard.html">Dashboard</a>
-    <a href="kanban.html" class="text-indigo-400">Kanban</a>
+<!-- ================= SIDEBAR ================= -->
+<aside class="w-64 bg-slate-900 text-white min-h-screen p-6 flex flex-col">
+
+  <!-- App name -->
+  <h2 class="text-2xl font-bold mb-8">⚙️ GearGuard</h2>
+
+  <!-- Navigation -->
+  <nav class="space-y-3 flex-1">
+    <a href="dashboard.html" class="block px-3 py-2 rounded hover:bg-slate-800">
+      📊 Dashboard
+    </a>
+    <a href="equipment.html" class="block px-3 py-2 rounded hover:bg-slate-800">
+      📦 Equipment
+    </a>
+    <a href="kanban.html" class="block px-3 py-2 rounded bg-slate-800">
+      📋 Kanban
+    </a>
+    <a href="calendar.html" class="block px-3 py-2 rounded hover:bg-slate-800">
+      📅 Calendar
+    </a>
   </nav>
+
+  <!-- User info + logout -->
+  <div class="border-t border-slate-700 pt-4 mt-4">
+    <p class="text-sm text-slate-400 mb-2">
+      Logged in as: <span class="text-white">John Doe</span>
+    </p>
+    <a href="login.html"
+       class="block text-center bg-red-600 py-2 rounded text-sm hover:bg-red-700 transition">
+      Logout
+    </a>
+  </div>
+
+  <!-- Dark mode toggle -->
+  <button onclick="toggleDarkMode()"
+    class="mt-3 bg-slate-700 py-2 rounded text-sm hover:bg-slate-600 transition">
+    🌙 Toggle Dark Mode
+  </button>
+
 </aside>
 
+<!-- ================= MAIN CONTENT ================= -->
 <main class="flex-1 p-8">
 
-<h1 class="text-2xl font-semibold mb-6">Maintenance Board</h1>
+<!-- Header -->
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-semibold">Maintenance Board</h1>
+  <button onclick="showToast('Create request – connect to Flask backend')"
+     class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+    + New Request
+  </button>
+</div>
 
+<!-- ================= KANBAN BOARD ================= -->
 <div class="grid grid-cols-4 gap-4">
 
-  <div class="bg-slate-200 dark:bg-slate-700 rounded-xl p-4">
-    <h3 class="font-semibold mb-3">New</h3>
-    <div draggable="true" id="task1" ondragstart="drag(event)"
-      class="bg-white dark:bg-slate-800 p-3 rounded shadow cursor-grab">
-      Printer not working
+  <!-- ========== NEW COLUMN ========== -->
+  <div class="kanban-column bg-slate-200 dark:bg-slate-700 rounded-xl p-4 min-h-[500px]"
+       data-column="new"
+       ondrop="drop(event)" ondragover="allowDrop(event)">
+
+    <h3 class="font-semibold mb-3 flex justify-between items-center">
+      <span>📥 New</span>
+      <span class="count bg-slate-300 dark:bg-slate-600 px-2 py-1 rounded text-xs">3</span>
+    </h3>
+
+    <!-- Task -->
+    <div draggable="true" id="task-1" ondragstart="drag(event)"
+         class="task-card bg-white dark:bg-slate-800 p-3 rounded shadow mb-3 cursor-grab">
+      <p class="font-medium mb-1">Printer not working</p>
+      <p class="text-sm text-gray-500 mb-2">📦 Printer 01</p>
+      <span class="text-xs bg-red-500 text-white px-2 py-1 rounded">Overdue</span>
+    </div>
+
+    <div draggable="true" id="task-2" ondragstart="drag(event)"
+         class="task-card bg-white dark:bg-slate-800 p-3 rounded shadow mb-3 cursor-grab">
+      <p class="font-medium mb-1">Routine oil change</p>
+      <p class="text-sm text-gray-500">📦 CNC Machine</p>
+    </div>
+
+    <div draggable="true" id="task-3" ondragstart="drag(event)"
+         class="task-card bg-white dark:bg-slate-800 p-3 rounded shadow mb-3 cursor-grab">
+      <p class="font-medium mb-1">Network cable repair</p>
+      <p class="text-sm text-gray-500">📦 Office Router</p>
     </div>
   </div>
 
-  <div class="bg-slate-200 dark:bg-slate-700 rounded-xl p-4"
+  <!-- ========== IN PROGRESS COLUMN ========== -->
+  <div class="kanban-column bg-slate-200 dark:bg-slate-700 rounded-xl p-4 min-h-[500px]"
+       data-column="in-progress"
        ondrop="drop(event)" ondragover="allowDrop(event)">
-    <h3 class="font-semibold mb-3">In Progress</h3>
+
+    <h3 class="font-semibold mb-3 flex justify-between items-center">
+      <span>🔧 In Progress</span>
+      <span class="count bg-slate-300 dark:bg-slate-600 px-2 py-1 rounded text-xs">2</span>
+    </h3>
+
+    <div draggable="true" id="task-4" ondragstart="drag(event)"
+         class="task-card bg-white dark:bg-slate-800 p-3 rounded shadow mb-3 cursor-grab">
+      <p class="font-medium mb-1">Replace toner cartridge</p>
+      <p class="text-sm text-gray-500">📦 Copier 02</p>
+    </div>
+
+    <div draggable="true" id="task-5" ondragstart="drag(event)"
+         class="task-card bg-white dark:bg-slate-800 p-3 rounded shadow mb-3 cursor-grab">
+      <p class="font-medium mb-1">Brake inspection</p>
+      <p class="text-sm text-gray-500">📦 Forklift #5</p>
+    </div>
   </div>
 
-  <div class="bg-slate-200 dark:bg-slate-700 rounded-xl p-4">
-    <h3 class="font-semibold mb-3">Repaired</h3>
+  <!-- ========== REPAIRED COLUMN ========== -->
+  <div class="kanban-column bg-slate-200 dark:bg-slate-700 rounded-xl p-4 min-h-[500px]"
+       data-column="repaired"
+       ondrop="drop(event)" ondragover="allowDrop(event)">
+
+    <h3 class="font-semibold mb-3 flex justify-between items-center">
+      <span>✅ Repaired</span>
+      <span class="count bg-slate-300 dark:bg-slate-600 px-2 py-1 rounded text-xs">1</span>
+    </h3>
+
+    <div draggable="true" id="task-6" ondragstart="drag(event)"
+         class="task-card bg-white dark:bg-slate-800 p-3 rounded shadow mb-3 cursor-grab">
+      <p class="font-medium mb-1">Monitor replacement</p>
+      <p class="text-sm text-gray-500">📦 Workstation #12</p>
+    </div>
   </div>
 
-  <div class="bg-red-100 dark:bg-red-900 rounded-xl p-4">
-    <h3 class="font-semibold mb-3">Scrap</h3>
+  <!-- ========== SCRAP COLUMN ========== -->
+  <div class="kanban-column bg-red-100 dark:bg-red-900 rounded-xl p-4 min-h-[500px]"
+       data-column="scrap"
+       ondrop="drop(event)" ondragover="allowDrop(event)">
+
+    <h3 class="font-semibold mb-3 flex justify-between items-center text-red-700 dark:text-red-300">
+      <span>🗑 Scrap</span>
+      <span class="count bg-red-200 dark:bg-red-800 px-2 py-1 rounded text-xs">0</span>
+    </h3>
+
+    <!-- Scrap items go here -->
   </div>
 
 </div>
-
 </main>
 
-<script src="js/app.js"></script>
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+/* ---------- Drag & Drop ---------- */
+function allowDrop(e) {
+  e.preventDefault();
+}
+
+function drag(e) {
+  e.dataTransfer.setData("id", e.target.id);
+}
+
+function drop(e) {
+  e.preventDefault();
+  const id = e.dataTransfer.getData("id");
+  const task = document.getElementById(id);
+
+  // Append only if dropping inside a column
+  if (e.target.classList.contains("kanban-column")) {
+    e.target.appendChild(task);
+    updateCounts();
+    showToast("Status updated");
+  }
+}
+
+/* ---------- Update column counters ---------- */
+function updateCounts() {
+  document.querySelectorAll(".kanban-column").forEach(col => {
+    const count = col.querySelectorAll(".task-card").length;
+    col.querySelector(".count").innerText = count;
+  });
+}
+
+/* ---------- Toast message ---------- */
+function showToast(msg) {
+  const toast = document.createElement("div");
+  toast.innerText = msg;
+  toast.className =
+    "fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-2 rounded shadow";
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2000);
+}
+
+/* ---------- Dark mode ---------- */
+function toggleDarkMode() {
+  document.documentElement.classList.toggle("dark");
+}
+</script>
+
 </body>
 </html>

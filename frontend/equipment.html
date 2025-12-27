@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html class="dark">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Equipment | GearGuard</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -8,17 +10,52 @@
 <body class="bg-slate-100 dark:bg-slate-900 flex text-black dark:text-white">
 
 <!-- SIDEBAR -->
-<aside class="w-64 bg-slate-900 text-white min-h-screen p-6">
-  <h2 class="text-2xl font-bold mb-8">GearGuard</h2>
-  <nav class="space-y-3">
-    <a href="dashboard.html" class="block hover:text-indigo-400">Dashboard</a>
-    <a href="equipment.html" class="block text-indigo-400">Equipment</a>
+<aside class="w-64 bg-slate-900 text-white min-h-screen p-6 flex flex-col">
+  <h2 class="text-2xl font-bold mb-8">⚙️ GearGuard</h2>
+
+  <nav class="space-y-3 flex-1">
+    <a href="dashboard.html" class="block px-3 py-2 rounded hover:bg-slate-800">
+      📊 Dashboard
+    </a>
+    <!-- Active page -->
+    <a href="equipment.html" class="block px-3 py-2 rounded bg-slate-800">
+      📦 Equipment
+    </a>
+    <a href="kanban.html" class="block px-3 py-2 rounded hover:bg-slate-800">
+      📋 Kanban
+    </a>
+    <a href="calendar.html" class="block px-3 py-2 rounded hover:bg-slate-800">
+      📅 Calendar
+    </a>
   </nav>
+
+  <div class="border-t border-slate-700 pt-4 mt-4">
+    <p class="text-sm text-slate-400 mb-2">
+      Logged in as: <span class="text-white">John Doe</span>
+    </p>
+    <a href="login.html" 
+       class="block text-center bg-red-600 py-2 rounded text-sm hover:bg-red-700 transition">
+      Logout
+    </a>
+  </div>
+
+  <button onclick="toggleDarkMode()"
+    class="mt-3 bg-slate-700 py-2 rounded text-sm hover:bg-slate-600 transition">
+    🌙 Toggle Dark Mode
+  </button>
 </aside>
 
+<!-- MAIN CONTENT -->
 <main class="flex-1 p-8">
 
-<h1 class="text-2xl font-semibold mb-4">Equipment</h1>
+<div class="flex justify-between items-center mb-4">
+  <h1 class="text-2xl font-semibold">Equipment Inventory</h1>
+  <!-- Add new equipment button -->
+  <button onclick="showToast('Add equipment form - Connect to backend')"
+     class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+    + Add Equipment
+  </button>
+</div>
 
 <div class="bg-white dark:bg-slate-800 rounded-xl shadow overflow-hidden">
 
@@ -26,23 +63,102 @@
   <thead class="bg-slate-200 dark:bg-slate-700">
     <tr>
       <th class="p-4 text-left">Name</th>
+      <th class="p-4 text-left">Serial Number</th>
       <th class="p-4 text-left">Department</th>
-      <th class="p-4 text-left">Team</th>
+      <th class="p-4 text-left">Maintenance Team</th>
       <th class="p-4 text-left">Action</th>
     </tr>
   </thead>
   <tbody>
-    <tr class="border-t dark:border-slate-700">
-      <td class="p-4">Printer 01</td>
+    
+    <!-- Equipment Row 1 -->
+    <tr class="border-t dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700">
+      <td class="p-4">
+        <a href="#" onclick="showToast('View equipment details')" 
+           class="text-indigo-600 hover:underline font-medium">
+          Printer 01
+        </a>
+      </td>
+      <td class="p-4 text-gray-500">SN-2024-001</td>
       <td class="p-4">IT</td>
       <td class="p-4">IT Support</td>
       <td class="p-4">
-        <button onclick="showToast('Opening maintenance requests')"
-          class="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 transition">
-          Maintenance (3)
+        <!-- Smart Button with Badge -->
+        <button onclick="window.location.href='kanban.html'"
+           class="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 transition relative">
+          Maintenance
+          <!-- Badge showing request count -->
+          <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+            3
+          </span>
         </button>
       </td>
     </tr>
+
+    <!-- Equipment Row 2 -->
+    <tr class="border-t dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700">
+      <td class="p-4">
+        <a href="#" onclick="showToast('View equipment details')" 
+           class="text-indigo-600 hover:underline font-medium">
+          CNC Machine Alpha
+        </a>
+      </td>
+      <td class="p-4 text-gray-500">SN-2024-002</td>
+      <td class="p-4">Production</td>
+      <td class="p-4">Mechanics</td>
+      <td class="p-4">
+        <button onclick="window.location.href='kanban.html'"
+           class="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 transition relative">
+          Maintenance
+          <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+            1
+          </span>
+        </button>
+      </td>
+    </tr>
+
+    <!-- Equipment Row 3 -->
+    <tr class="border-t dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700">
+      <td class="p-4">
+        <a href="#" onclick="showToast('View equipment details')" 
+           class="text-indigo-600 hover:underline font-medium">
+          Copier 02
+        </a>
+      </td>
+      <td class="p-4 text-gray-500">SN-2024-003</td>
+      <td class="p-4">IT</td>
+      <td class="p-4">IT Support</td>
+      <td class="p-4">
+        <button onclick="window.location.href='kanban.html'"
+           class="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 transition relative">
+          Maintenance
+          <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+            1
+          </span>
+        </button>
+      </td>
+    </tr>
+
+    <!-- Equipment Row 4 -->
+    <tr class="border-t dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700">
+      <td class="p-4">
+        <a href="#" onclick="showToast('View equipment details')" 
+           class="text-indigo-600 hover:underline font-medium">
+          Forklift #5
+        </a>
+      </td>
+      <td class="p-4 text-gray-500">SN-2024-010</td>
+      <td class="p-4">Warehouse</td>
+      <td class="p-4">Mechanics</td>
+      <td class="p-4">
+        <button onclick="window.location.href='kanban.html'"
+           class="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 transition relative">
+          Maintenance
+          <!-- No badge when count is 0 -->
+        </button>
+      </td>
+    </tr>
+    
   </tbody>
 </table>
 
