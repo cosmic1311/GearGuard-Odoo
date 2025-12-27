@@ -15,7 +15,7 @@ def login():
 
         if user and check_password_hash(user.password, request.form["password"]):
             login_user(user)
-            return redirect(url_for("tasks.dashboard"))
+            return redirect(url_for("dashboard.dashboard"))
 
         flash("Invalid username or password", "danger")
 
