@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html class="dark">
+<head>
+  <title>Dashboard | GearGuard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 dark:bg-slate-900 flex text-black dark:text-white">
+
+<!-- SIDEBAR -->
+<aside class="w-64 bg-slate-900 text-white min-h-screen p-6 flex flex-col">
+  <h2 class="text-2xl font-bold mb-8">GearGuard</h2>
+
+  <nav class="space-y-3 flex-1">
+    <a href="dashboard.html" class="block px-3 py-2 rounded bg-slate-800">Dashboard</a>
+    <a href="equipment.html" class="block px-3 py-2 rounded hover:bg-slate-800">Equipment</a>
+    <a href="kanban.html" class="block px-3 py-2 rounded hover:bg-slate-800">Kanban</a>
+    <a href="calendar.html" class="block px-3 py-2 rounded hover:bg-slate-800">Calendar</a>
+  </nav>
+
+  <button onclick="toggleDarkMode()"
+    class="bg-slate-700 py-2 rounded text-sm hover:bg-slate-600 transition">
+    Toggle Dark Mode
+  </button>
+</aside>
+
+<!-- MAIN -->
+<main class="flex-1 p-8">
+
+<h1 class="text-2xl font-semibold mb-6">Dashboard</h1>
+
+<!-- STATS -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+  <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow hover:shadow-xl transition">
+    <p class="text-gray-500">Total Equipment</p>
+    <h2 class="text-3xl font-bold">12</h2>
+  </div>
+
+  <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow hover:shadow-xl transition">
+    <p class="text-gray-500">Open Requests</p>
+    <h2 class="text-3xl font-bold">5</h2>
+  </div>
+
+  <div class="bg-red-500 p-6 rounded-xl shadow text-white hover:shadow-xl transition">
+    <p>Overdue</p>
+    <h2 class="text-3xl font-bold">1</h2>
+  </div>
+
+</div>
+
+<!-- CHART -->
+<div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow">
+  <h3 class="mb-4 font-semibold">Requests per Team</h3>
+  <canvas id="teamChart"></canvas>
+</div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/app.js"></script>
+<script>
+new Chart(document.getElementById("teamChart"), {
+  type: "bar",
+  data: {
+    labels: ["IT Support", "Mechanics", "Electricians"],
+    datasets: [{
+      data: [5, 3, 2],
+      backgroundColor: "#6366f1"
+    }]
+  }
+});
+</script>
+
+</body>
+</html>

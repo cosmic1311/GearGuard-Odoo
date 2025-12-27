@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html class="dark">
+<head>
+  <title>Kanban | GearGuard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 dark:bg-slate-900 flex text-black dark:text-white">
+
+<aside class="w-64 bg-slate-900 text-white min-h-screen p-6">
+  <h2 class="text-2xl font-bold mb-8">GearGuard</h2>
+  <nav class="space-y-3">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="kanban.html" class="text-indigo-400">Kanban</a>
+  </nav>
+</aside>
+
+<main class="flex-1 p-8">
+
+<h1 class="text-2xl font-semibold mb-6">Maintenance Board</h1>
+
+<div class="grid grid-cols-4 gap-4">
+
+  <div class="bg-slate-200 dark:bg-slate-700 rounded-xl p-4">
+    <h3 class="font-semibold mb-3">New</h3>
+    <div draggable="true" id="task1" ondragstart="drag(event)"
+      class="bg-white dark:bg-slate-800 p-3 rounded shadow cursor-grab">
+      Printer not working
+    </div>
+  </div>
+
+  <div class="bg-slate-200 dark:bg-slate-700 rounded-xl p-4"
+       ondrop="drop(event)" ondragover="allowDrop(event)">
+    <h3 class="font-semibold mb-3">In Progress</h3>
+  </div>
+
+  <div class="bg-slate-200 dark:bg-slate-700 rounded-xl p-4">
+    <h3 class="font-semibold mb-3">Repaired</h3>
+  </div>
+
+  <div class="bg-red-100 dark:bg-red-900 rounded-xl p-4">
+    <h3 class="font-semibold mb-3">Scrap</h3>
+  </div>
+
+</div>
+
+</main>
+
+<script src="js/app.js"></script>
+</body>
+</html>
