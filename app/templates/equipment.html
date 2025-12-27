@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html class="dark">
+<head>
+  <title>Equipment | GearGuard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 dark:bg-slate-900 flex text-black dark:text-white">
+
+<!-- SIDEBAR -->
+<aside class="w-64 bg-slate-900 text-white min-h-screen p-6">
+  <h2 class="text-2xl font-bold mb-8">GearGuard</h2>
+  <nav class="space-y-3">
+    <a href="dashboard.html" class="block hover:text-indigo-400">Dashboard</a>
+    <a href="equipment.html" class="block text-indigo-400">Equipment</a>
+  </nav>
+</aside>
+
+<main class="flex-1 p-8">
+
+<h1 class="text-2xl font-semibold mb-4">Equipment</h1>
+
+<div class="bg-white dark:bg-slate-800 rounded-xl shadow overflow-hidden">
+
+<table class="w-full">
+  <thead class="bg-slate-200 dark:bg-slate-700">
+    <tr>
+      <th class="p-4 text-left">Name</th>
+      <th class="p-4 text-left">Department</th>
+      <th class="p-4 text-left">Team</th>
+      <th class="p-4 text-left">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="border-t dark:border-slate-700">
+      <td class="p-4">Printer 01</td>
+      <td class="p-4">IT</td>
+      <td class="p-4">IT Support</td>
+      <td class="p-4">
+        <button onclick="showToast('Opening maintenance requests')"
+          class="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 transition">
+          Maintenance (3)
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+</main>
+
+<script src="js/app.js"></script>
+</body>
+</html>

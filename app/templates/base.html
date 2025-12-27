@@ -1,17 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>{% block title %}Flask App{% endblock %}</title>
+    <meta charset="UTF-8">
+
+    <title>
+        {% block title %}GearGuard{% endblock %}
+    </title>
+
+    <!-- Global CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    {% block head %}{% endblock %}
 </head>
 <body>
-    <nav>
-        <a href="/login">Login</a> |
-        <a href="/register">Register</a> |
-        <a href="/tasks">Tasks</a>
-    </nav>
-    <hr>
 
-    {% block content %}{% endblock %}
+    <!-- 🔹 Top Navbar -->
+    <header>
+        <nav class="navbar">
+            <h2 class="logo">GearGuard</h2>
+
+            <ul class="nav-links">
+                <li><a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('calendar.calendar') }}">Calendar</a></li>
+                <li><a href="{{ url_for('equipment.equipment') }}">Equipment</a></li>
+                <li><a href="{{ url_for('kanban.kanban') }}">Kanban</a></li>
+            </ul>
+
+            <ul class="auth-links">
+                <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 🔹 Main Page Content -->
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- 🔹 Footer -->
+    <footer class="footer">
+        <p>© 2025 GearGuard-Odoo</p>
+    </footer>
+
 </body>
 </html>
+

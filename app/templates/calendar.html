@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html class="dark">
+<head>
+  <title>Calendar | GearGuard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+</head>
+
+<body class="bg-slate-100 dark:bg-slate-900 p-8 text-black dark:text-white">
+
+<h2 class="text-2xl font-semibold mb-4">Preventive Maintenance Calendar</h2>
+
+<div id="calendar" class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const calendar = new FullCalendar.Calendar(
+    document.getElementById("calendar"), {
+      initialView: "dayGridMonth",
+      events: [
+        { title: "Printer Check", start: "2025-01-20" },
+        { title: "CNC Maintenance", start: "2025-01-25" }
+      ]
+    }
+  );
+  calendar.render();
+});
+</script>
+
+</body>
+</html>

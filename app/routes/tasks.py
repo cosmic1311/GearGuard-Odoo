@@ -5,4 +5,5 @@ tasks_bp = Blueprint('tasks', __name__)
 @tasks_bp.route("/")
 @tasks_bp.route("/tasks")
 def tasks():
-    return render_template("tasks.html")
+    return render_template("dashboard.html")
+
